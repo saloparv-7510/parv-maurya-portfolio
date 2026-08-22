@@ -39,9 +39,28 @@ export const profile = {
 /* ⭐ Replace every '#' with your real profile URL. Set `enabled: false`
    to hide one without deleting it. */
 export const socials = [
-  { id: 'github', label: 'GitHub', handle: '@parvmaurya', url: '#', enabled: true },
-  { id: 'linkedin', label: 'LinkedIn', handle: 'in/parvmaurya', url: '#', enabled: true },
-  { id: 'twitter', label: 'X / Twitter', handle: '@parvmaurya', url: '#', enabled: true },
+  {
+    id: 'github',
+    label: 'GitHub',
+    handle: '@saloparv-7510',
+    url: 'https://github.com/saloparv-7510',
+    enabled: true,
+  },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    handle: 'in/parv-maurya-4a34a9273',
+    url: 'https://www.linkedin.com/in/parv-maurya-4a34a9273',
+    enabled: true,
+  },
+  {
+    id: 'twitter',
+    label: 'X / Twitter',
+    handle: '@parv_maurya',
+    url: 'https://x.com/parv_maurya',
+    enabled: true,
+  },
+  // Not linked yet — flip `enabled` to true once you add a real URL.
   { id: 'instagram', label: 'Instagram', handle: '@parvmaurya', url: '#', enabled: false },
 ]
 
