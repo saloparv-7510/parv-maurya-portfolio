@@ -23,16 +23,20 @@ export const profile = {
   email: 'parvmaurya552@gmail.com',
   available: true, // toggles the "Open to opportunities" pill in the hero
 
-  // ⭐ PROFILE PHOTO — put e.g. profile.jpg in /public/images and set:
-  //    photo: '/images/profile.jpg'
-  //    Leave as null to show the animated monogram avatar instead.
-  photo: null,
+  // ⭐ PROFILE PHOTO — the file lives in /public/images.
+  //    NOTE: no leading slash. 'images/…' resolves correctly on GitHub Pages
+  //    (served from /parv-maurya-portfolio/), on Netlify and inside the APK;
+  //    '/images/…' would 404 on Pages.
+  //    A second photo is bundled — swap this line to 'images/profile-alt.jpg'
+  //    to use it. Set to null to show the animated monogram avatar instead.
+  photo: 'images/profile.jpg',
 
   // Roles cycled by the typing animation in the hero
   roles: ['Java Developer', 'Web Developer', 'Android Developer', 'Networking Enthusiast'],
 
-  // ⭐ RESUME — put your PDF in /public and set e.g. '/Parv-Maurya-Resume.pdf'
-  resume: null,
+  // ⭐ RESUME — the PDF lives in /public. No leading slash (see photo above).
+  //    Powers the "Resume" button in the navbar; opens in a new tab.
+  resume: 'Parv-Maurya-Resume.pdf',
 }
 
 /* ---------------------------------------------------------------- SOCIALS -- */
