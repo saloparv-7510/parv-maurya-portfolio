@@ -455,7 +455,10 @@ export const projects = [
         body: 'The layout was designed at the smallest breakpoint first, then given room to breathe on larger screens.',
       },
     ],
-    links: { github: null, demo: null },
+    // ⭐ YOUR LINKS (set either to null to hide that button)
+    //    demo: the Vercel deployment recorded on the repo is offline right now
+    //    (404). Redeploy it and paste the URL here to light up the Live button.
+    links: { github: 'https://github.com/saloparv-7510/Food-Delivery', demo: null },
     image: null,
     accent: 'amber',
   },
