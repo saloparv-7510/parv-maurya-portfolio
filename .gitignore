@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS noise
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Vite cache
+.vite/
+
+# Capacitor / Android (generated build output + machine-specific config)
+android/.gradle/
+android/build/
+android/app/build/
+android/build.log
+android/local.properties          # contains this machine's SDK path
+android/app/src/main/assets/public/  # synced copy of dist/
+android/capacitor-cordova-android-plugins/
+*.apk
+
+# Packaged deliverables (rebuilt from dist/ — see DEPLOY.md)
+portfolio-site.zip
+
+# JVM crash dumps from failed Gradle runs
+hs_err_pid*.log
+replay_pid*.log
+
+# Personal Claude Code settings (machine-local)
+.claude/settings.local.json

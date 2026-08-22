@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Parv Maurya</string>
+    <string name="title_activity_main">Parv Maurya</string>
+    <string name="package_name">com.parvmaurya.portfolio</string>
+    <string name="custom_url_scheme">com.parvmaurya.portfolio</string>
+</resources>

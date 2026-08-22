@@ -1,0 +1,289 @@
+/* ============================================================================
+ *  Global styles + design system primitives
+ *  Fonts are bundled locally (no network request → works offline in interviews)
+ * ========================================================================== */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/sora';
+@import '@fontsource-variable/jetbrains-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------- BASE ---- */
+@layer base {
+  :root {
+    --shell-x: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sticky navbar clearance for #anchor jumps */
+    scroll-padding-top: 6rem;
+    /* html is the scroll container every scroll-linked animation measures
+       against. Leaving it `static` makes those offsets guesswork (and makes
+       Framer Motion warn about it in dev). */
+    position: relative;
+  }
+
+  body {
+    @apply bg-ink-950 font-sans text-slate-300 antialiased;
+    /* Clips decorative elements that intentionally bleed past the viewport:
+       the footer name watermark, the hero orbit rings, section glows. */
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Custom cursor replaces the pointer on precise devices only */
+  @media (hover: hover) and (pointer: fine) {
+    body.custom-cursor,
+    body.custom-cursor * {
+      cursor: none !important;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-semibold tracking-tight text-white;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    @apply bg-accent-400/30 text-white;
+  }
+
+  /* --- Scrollbar ---------------------------------------------------------- */
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #06070f;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #22d3ee55, #8b5cf655);
+    border-radius: 99px;
+    border: 2px solid #06070f;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #22d3ee99, #8b5cf699);
+  }
+
+  /* Keyboard focus stays visible and on-brand */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-400/70 ring-offset-2 ring-offset-ink-950;
+    border-radius: 6px;
+  }
+
+  /* --- ACCESSIBILITY: honour the OS "reduce motion" setting -------------- */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------ COMPONENTS -- */
+@layer components {
+  /* Page gutter + max width, used by every section */
+  .shell {
+    @apply mx-auto w-full max-w-shell px-[--shell-x];
+  }
+
+  /* Frosted glass surface — the core material of the whole design */
+  .glass {
+    @apply border border-white/[0.07] bg-white/[0.03] backdrop-blur-xl;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 20px 60px -32px rgba(0, 0, 0, 0.9);
+  }
+
+  .glass-strong {
+    @apply border border-white/10 bg-ink-850/70 backdrop-blur-2xl;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 28px 80px -34px rgba(0, 0, 0, 0.95);
+  }
+
+  /* The sticky navbar surface once it condenses (see Navbar.jsx). Its own class
+     so the touch override below can reach it — an inline `backdrop-blur-*`
+     utility can't be turned off by a media query. */
+  .nav-blur {
+    @apply bg-ink-900/70 backdrop-blur-2xl;
+  }
+
+  /* --- Mobile / touch scroll performance ----------------------------------
+     `backdrop-filter: blur()` is the most expensive thing that happens while
+     the page scrolls: every frosted surface re-samples and re-blurs the moving
+     pixels behind it, every single frame. With a dozen glass cards on screen at
+     once, a phone's WebView (and the packaged APK) drops well below 60fps.
+
+     On coarse-pointer devices we drop the *live* blur and stand in a slightly
+     more opaque fill. The surfaces stay translucent, so a hint of the moving
+     background still shows through for depth — but showing un-blurred pixels is
+     nearly free, whereas re-blurring them is not. At phone size the difference
+     is barely perceptible; scrolling snaps back to a locked 60fps. Desktop,
+     which has the GPU budget for it, keeps the real frosted glass. */
+  @media (hover: none), (pointer: coarse) {
+    .glass {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      background-color: rgba(13, 17, 30, 0.8);
+    }
+    .glass-strong {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      background-color: rgba(9, 12, 22, 0.92);
+    }
+    .nav-blur {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      background-color: rgba(7, 9, 18, 0.92);
+    }
+  }
+
+  /* Animated gradient text */
+  .text-gradient {
+    @apply bg-accent-sweep bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: gradient-pan 8s ease infinite;
+  }
+
+  .text-gradient-static {
+    @apply bg-gradient-to-r from-accent-300 via-indigo-300 to-iris-400 bg-clip-text text-transparent;
+  }
+
+  /* Section eyebrow label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-mono text-[0.7rem] uppercase tracking-[0.32em] text-accent-300/90;
+  }
+
+  /* Small pill / badge */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04]
+           px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider text-slate-400
+           transition-colors duration-300;
+  }
+
+  .chip-hover:hover {
+    @apply border-accent-400/40 bg-accent-400/10 text-accent-200;
+  }
+
+  /* Gradient hairline divider */
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-white/[0.12] to-transparent;
+  }
+
+  /* A 1px gradient border achieved with a masked pseudo-element.
+     Cheaper and crisper than nested divs. */
+  .ring-gradient {
+    position: relative;
+  }
+  .ring-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg, rgba(34, 211, 238, 0.55), rgba(139, 92, 246, 0.35), transparent 65%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .ring-gradient:hover::before,
+  .ring-gradient.is-active::before {
+    opacity: 1;
+  }
+
+  /* Card that lifts and reveals a spotlight following the cursor.
+     The --mx/--my variables are set by useSpotlight(). */
+  .spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(34, 211, 238, 0.13),
+      transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+  }
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------- UTILITIES -- */
+@layer utilities {
+  /* Promote to its own compositor layer — keeps transforms at 60fps */
+  .gpu {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .perspective {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  /* Fade the edges of scrolling marquees / long lists */
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+    mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 34px rgba(34, 211, 238, 0.35);
+  }
+
+  /* Screen-reader-only */
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
