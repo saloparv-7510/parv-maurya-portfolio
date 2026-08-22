@@ -77,10 +77,11 @@ export default function PhoneMockup({ className = '' }) {
 
   return (
     <div className={`relative ${className}`}>
-      {/* Ambient glow behind the device */}
+      {/* Ambient glow behind the device — `bloom` rather than a 64px blur,
+          because the mockup is parallaxed as the card scrolls past. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 scale-[1.15] rounded-[3rem] bg-emerald-500/10 blur-3xl"
+        className="absolute inset-0 -z-10 scale-[1.15] rounded-[3rem] bg-emerald-500/10 bloom"
       />
 
       {/* ------------------------------------------------- device frame -- */}

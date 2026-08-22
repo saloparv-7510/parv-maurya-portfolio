@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Code2, Network, Sparkles, MapPin, Mail, GraduationCap } from 'lucide-react'
 import { about, profile } from '../data/content'
 import { EASE, VIEWPORT, cn, stagger } from '../lib/motion'
+import { assetUrl } from '../lib/assets'
 import Section from './ui/Section'
 import SectionHeading from './ui/SectionHeading'
 import Reveal from './ui/Reveal'
@@ -47,7 +48,7 @@ export default function About() {
               <div className="absolute inset-0 overflow-hidden rounded-[26px] bg-ink-900">
                 {profile.photo ? (
                   <img
-                    src={profile.photo}
+                    src={assetUrl(profile.photo)}
                     alt={profile.name}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"

@@ -86,10 +86,11 @@ export default function BrowserMockup({ className = '' }) {
 
   return (
     <div className={`relative ${className}`}>
-      {/* Ambient warm glow — matches the food/amber accent of this project */}
+      {/* Ambient warm glow — matches the food/amber accent of this project.
+          `bloom` not `blur-3xl`: this sits inside the parallaxed mockup. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 scale-105 rounded-3xl bg-amber-500/10 blur-3xl"
+        className="absolute inset-0 -z-10 scale-105 rounded-3xl bg-amber-500/10 bloom"
       />
 
       <div className="overflow-hidden rounded-2xl border border-white/[0.12] bg-ink-800 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]">

@@ -5,6 +5,7 @@ import { navLinks, profile } from '../data/content'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import { useLockBodyScroll } from '../hooks/useLockBodyScroll'
 import { cn, EASE, scrollToSection } from '../lib/motion'
+import { resumeLink } from '../lib/assets'
 
 const SECTION_IDS = navLinks.map((l) => l.id)
 
@@ -12,6 +13,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const active = useScrollSpy(SECTION_IDS, 150)
+
+  // Where the Resume button points. The website and the APK need different
+  // answers, because Android's WebView cannot render a PDF — see lib/assets.js.
+  // Resolved during render so Capacitor's bridge is certainly available.
+  const resume = resumeLink(profile)
 
   useLockBodyScroll(open)
 
@@ -110,9 +116,7 @@ export default function Navbar() {
             {/* ⭐ Optional resume button — set `profile.resume` in content.js */}
             {profile.resume && (
               <a
-                href={profile.resume}
-                target="_blank"
-                rel="noreferrer noopener"
+                {...resume}
                 className="hidden rounded-full border border-white/12 px-3.5 py-2 font-mono text-[0.68rem]
                            uppercase tracking-wider text-slate-300 transition-colors hover:border-accent-400/40
                            hover:text-accent-200 md:inline-flex"
@@ -223,9 +227,7 @@ export default function Navbar() {
                 </a>
                 {profile.resume && (
                   <a
-                    href={profile.resume}
-                    target="_blank"
-                    rel="noreferrer noopener"
+                    {...resume}
                     className="shrink-0 rounded-full border border-white/12 px-3 py-1.5 font-mono text-[0.62rem] uppercase tracking-wider text-slate-300"
                   >
                     Resume

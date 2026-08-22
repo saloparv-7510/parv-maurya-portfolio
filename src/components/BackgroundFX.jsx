@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import ParticleNetwork from './ParticleNetwork'
+import { useHasFinePointer } from '../hooks/useMediaQuery'
 
 /**
  * BackgroundFX — the fixed, full-page atmosphere sitting behind all content.
@@ -12,9 +13,23 @@ import ParticleNetwork from './ParticleNetwork'
  *
  * Everything here is `fixed` and `pointer-events-none`, so it costs nothing in
  * layout and never intercepts clicks.
+ *
+ * PERFORMANCE NOTE — this layer is on screen for the entire visit, so anything
+ * expensive here is expensive all the time. Two deliberate choices:
+ *   • The glows are plain radial gradients with NO `filter: blur()`. A gradient
+ *     is already soft-edged, so a 130px blur on top changed almost nothing
+ *     visually while forcing the GPU to re-blur three viewport-sized surfaces.
+ *   • The scroll-linked drift is desktop-only. Transforming a fixed, full-screen
+ *     layer on every scroll frame is what made phones and the APK flicker.
  */
 export default function BackgroundFX() {
   const reduce = useReducedMotion()
+  const fine = useHasFinePointer()
+
+  // Scroll-linked drift is desktop-only (see PERFORMANCE NOTE above). On touch
+  // the aurora is simply static — you cannot tell while scrolling anyway.
+  const animate = fine && !reduce
+
   const { scrollYProgress } = useScroll()
 
   // The aurora drifts very slightly as you scroll — enough to feel alive,
@@ -29,22 +44,22 @@ export default function BackgroundFX() {
 
       <motion.div
         className="absolute inset-0"
-        style={reduce ? undefined : { y: auroraY, opacity: auroraOpacity }}
+        style={animate ? { y: auroraY, opacity: auroraOpacity } : undefined}
       >
-        {/* Cyan glow, top-left */}
+        {/* Cyan glow, top-left. The gradient's own falloff *is* the blur. */}
         <div
-          className="absolute -left-[18%] -top-[22%] h-[62vh] w-[62vw] rounded-full blur-[130px]"
-          style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.16), transparent 68%)' }}
+          className="absolute -left-[18%] -top-[22%] h-[62vh] w-[62vw] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.16), transparent 72%)' }}
         />
         {/* Violet glow, right */}
         <div
-          className="absolute -right-[14%] top-[16%] h-[58vh] w-[52vw] rounded-full blur-[140px]"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.16), transparent 68%)' }}
+          className="absolute -right-[14%] top-[16%] h-[58vh] w-[52vw] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.16), transparent 72%)' }}
         />
         {/* Indigo glow, bottom */}
         <div
-          className="absolute bottom-[-18%] left-[24%] h-[52vh] w-[56vw] rounded-full blur-[150px]"
-          style={{ background: 'radial-gradient(circle, rgba(79,70,229,0.13), transparent 70%)' }}
+          className="absolute bottom-[-18%] left-[24%] h-[52vh] w-[56vw] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(79,70,229,0.13), transparent 74%)' }}
         />
       </motion.div>
 
@@ -67,8 +82,10 @@ export default function BackgroundFX() {
         <ParticleNetwork opacity={0.85} />
       </div>
 
-      {/* 4 — Grain + vignette give the flat gradients a premium, filmic depth */}
-      <div className="absolute inset-0 bg-noise opacity-[0.035] mix-blend-overlay" />
+      {/* 4 — Grain + vignette give the flat gradients a premium, filmic depth.
+             `.grain` owns the blend mode so the touch override in index.css can
+             drop it — blend modes are costly on phone GPUs. */}
+      <div className="absolute inset-0 bg-noise grain" />
       <div
         className="absolute inset-0"
         style={{

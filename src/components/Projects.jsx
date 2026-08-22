@@ -92,11 +92,13 @@ function ProjectCard({ project, reversed, onOpen }) {
       {...spot}
       className="spotlight ring-gradient group relative overflow-hidden rounded-[2rem] glass"
     >
-      {/* Ambient colour wash that intensifies on hover */}
+      {/* Ambient colour wash that intensifies on hover. `bloom` supplies the
+          soft edge via a mask — this card is scroll-parallaxed, so a real blur
+          here had to be re-rasterised on every frame. */}
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -top-32 h-72 w-72 rounded-full blur-[100px] transition-all duration-700',
+          'absolute -top-32 h-72 w-72 rounded-full bloom transition-all duration-700',
           a.glow,
           reversed ? '-right-24 group-hover:-right-16' : '-left-24 group-hover:-left-16',
         )}

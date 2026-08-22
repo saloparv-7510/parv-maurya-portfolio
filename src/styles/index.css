@@ -159,6 +159,47 @@
     }
   }
 
+  /* --- Ambient glow blobs -------------------------------------------------
+     Every soft coloured haze on the page (card corners, the wash behind a
+     project mockup) used to be a solid disc with `filter: blur(64–150px)`
+     layered on top. It looks right, but after backdrop-filter it is the most
+     expensive thing we paint: a large Gaussian blur must be re-rasterised
+     whenever anything in its subtree moves, and these sit inside
+     scroll-parallaxed and position-fixed layers — so "whenever" meant every
+     single frame while scrolling. That is what made the page flicker and drop
+     frames on a phone and inside the APK.
+
+     `.bloom` gets the identical soft falloff from a radial mask instead. The
+     element keeps its ordinary `bg-<colour>` class; the mask just fades that
+     colour out toward the edges. A mask is rasterised once and then only
+     composited — no convolution, nothing to recompute when the page scrolls.
+
+     Usage: swap the `blur-*` utility for `bloom` and leave `bg-*` alone.
+       before: class="h-80 w-80 rounded-full bg-accent-400/[0.09] blur-[110px]"
+       after:  class="h-80 w-80 rounded-full bg-accent-400/[0.09] bloom" */
+  .bloom {
+    -webkit-mask-image: radial-gradient(ellipse closest-side, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+    mask-image: radial-gradient(ellipse closest-side, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+  }
+
+  /* Film grain over the fixed backdrop. Own class so the touch override below
+     can reach the blend mode. */
+  .grain {
+    mix-blend-mode: overlay;
+    opacity: 0.035;
+  }
+
+  /* Blend modes force the whole fixed background stack to composite as a single
+     blend group, every frame. Cheap on a desktop GPU, not on a phone — and at
+     3.5% opacity plain alpha is indistinguishable. Must come *after* the base
+     rule above, or equal specificity would let the base win. */
+  @media (hover: none), (pointer: coarse) {
+    .grain {
+      mix-blend-mode: normal;
+      opacity: 0.025;
+    }
+  }
+
   /* Animated gradient text */
   .text-gradient {
     @apply bg-accent-sweep bg-clip-text text-transparent;

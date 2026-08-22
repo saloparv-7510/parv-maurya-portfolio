@@ -37,6 +37,13 @@ export const profile = {
   // ⭐ RESUME — the PDF lives in /public. No leading slash (see photo above).
   //    Powers the "Resume" button in the navbar; opens in a new tab.
   resume: 'Parv-Maurya-Resume.pdf',
+
+  // ⭐ RESUME URL (needed by the Android APK) — the *published* address of the
+  //    same PDF. Android's WebView cannot display a PDF itself, so inside the
+  //    app the button hands this URL to the phone's browser, which can. On the
+  //    website the bundled file above is used instead and this is ignored.
+  //    Update it if you move the site to a different host.
+  resumeUrl: 'https://saloparv-7510.github.io/parv-maurya-portfolio/Parv-Maurya-Resume.pdf',
 }
 
 /* ---------------------------------------------------------------- SOCIALS -- */

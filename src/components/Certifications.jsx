@@ -69,7 +69,7 @@ function FeaturedCertCard({ cert }) {
       {/* Ambient corner glow */}
       <span
         aria-hidden="true"
-        className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent-400/[0.09] blur-3xl
+        className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent-400/[0.09] bloom
                    transition-all duration-700 group-hover:bg-accent-400/[0.16]"
       />
 

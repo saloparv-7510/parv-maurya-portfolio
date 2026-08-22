@@ -100,14 +100,15 @@ export default function Contact() {
   return (
     <Section id="contact" index="08 / CONTACT">
       <div className="relative overflow-hidden rounded-[2rem] glass p-6 sm:p-10 lg:p-14">
-        {/* Ambient corner glows */}
+        {/* Ambient corner glows — `bloom` gives the soft falloff via a mask
+            instead of a 110px blur (see .bloom in styles/index.css). */}
         <span
           aria-hidden="true"
-          className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-accent-400/[0.09] blur-[110px]"
+          className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-accent-400/[0.09] bloom"
         />
         <span
           aria-hidden="true"
-          className="absolute -bottom-28 -right-20 h-80 w-80 rounded-full bg-iris-500/[0.09] blur-[110px]"
+          className="absolute -bottom-28 -right-20 h-80 w-80 rounded-full bg-iris-500/[0.09] bloom"
         />
 
         <div className="relative">
